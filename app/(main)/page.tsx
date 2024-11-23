@@ -32,6 +32,7 @@ export default function Home() {
     <>
       <h1 className="text-2xl font-extrabold">{ip?.ip}</h1>
       <span className="text-xl font-semibold">{ip?.city}</span>
+      <br />
       <span className="text-xl font-semibold">{ip?.country} </span>
     </>
   );
