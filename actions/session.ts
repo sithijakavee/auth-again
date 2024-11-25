@@ -13,3 +13,13 @@ export const getUserSessions = async () => {
     return sessions;
   }
 };
+
+export const deleteSession = async (sid: string) => {
+  const session = await db.session.delete({
+    where: {
+      sid: sid,
+    },
+  });
+
+  return true;
+};
