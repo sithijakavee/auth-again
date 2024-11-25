@@ -16,7 +16,7 @@ export default async function Home() {
 
   return (
     <div className="flex items-center justify-center w-full h-[calc(100vh-70px)] bg-[#F9F9F9]">
-      <div className="flex flex-col gap-5">
+      <div className="flex flex-col gap-6">
         <h1 className="text-xl font-bold">All sessions</h1>
 
         {reorderedSessions?.map((session, i) => {

@@ -23,7 +23,7 @@ const TerminateSessionButton = ({ sid }: { sid: string }) => {
 
   return (
     <button
-      className="w-full font-semibold p-1 px-2 bg-[#FF0000] text-white text-sm rounded-full"
+      className="min-w-[100px] font-semibold p-1 px-2 bg-[#FF0000] text-white text-sm rounded-full"
       onClick={() => terminateSession(sid)}
       disabled={loading}
     >
