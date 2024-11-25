@@ -18,6 +18,7 @@ model User {
 
 model Session {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  sid       String   @unique
   userId    String   @db.ObjectId
   userAgent String
   expires   DateTime

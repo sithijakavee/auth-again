@@ -13,7 +13,7 @@ const page = () => {
       <span className="text-sm">
         Already have an account?{" "}
         <Link href="/sign-in" className="text-sky-500">
-          Create one
+          Login
         </Link>
       </span>
     </div>

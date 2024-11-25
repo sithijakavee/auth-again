@@ -1,6 +1,8 @@
 "use client";
 
+import SigninForm from "@/components/auth/SignInForm";
 import axios, { AxiosError } from "axios";
+import Link from "next/link";
 import { useState } from "react";
 
 const page = () => {
@@ -24,32 +26,19 @@ const page = () => {
   };
 
   return (
-    <div className="w-full h-screen flex items-center justify-center">
-      <form className="flex flex-col items-center gap-2">
-        <input
-          type="text"
-          name="username"
-          placeholder="Username"
-          onChange={(e) => setUsername(e.target.value)}
-          value={username}
-          className="border px-2 py-1"
-        />
-        <input
-          type="password"
-          name="password"
-          placeholder="Password"
-          onChange={(e) => setPassword(e.target.value)}
-          value={password}
-          className="border px-2 py-1"
-        />
-        <button
-          type="button"
-          className="bg-emerald-500 p-2 text-white font-bold w-full"
-          onClick={submitForm}
-        >
-          Sign in
-        </button>
-      </form>
+    <div className="w-full h-screen flex flex-col gap-2 justify-center items-center">
+      <div className="flex gap-1 items-end mb-2">
+        <h1 className="text-3xl font-bold">AuthN</h1>
+        <h1 className="text-md font-bold">Sign Up</h1>
+      </div>
+
+      <SigninForm />
+      <span className="text-sm">
+        Don't have an account?{" "}
+        <Link href="/sign-up" className="text-sky-500">
+          Create one
+        </Link>
+      </span>
     </div>
   );
 };

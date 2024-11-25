@@ -1,16 +1,10 @@
-import { db } from "@/libs/db";
+import { db } from "@/lib/db";
 import { SignUpFormSchema, SignUpFormSchemaType } from "@/schemas";
 import bcrypt from "bcryptjs";
 import { User } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
-
+import { generateSID } from "@/lib/token";
 export const POST = async (req: NextRequest) => {
-  // console.log(req.headers.get("user-agent"));
-
-  // return Response.json({
-  //   status: 200,
-  // });
-
   try {
     const body = await req.json();
 
@@ -34,18 +28,25 @@ export const POST = async (req: NextRequest) => {
 
     if (newUser) {
       const userAgent = req.headers.get("User-Agent");
+      const sid = generateSID(newUser.id, newUser.email);
+      const expires = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000); // 7 days
       const session = await db.session.create({
         data: {
           userId: newUser.id,
+          sid: sid,
           userAgent: userAgent!,
-          expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // 7 days
+          expires: expires,
         },
       });
       console.log(data);
 
-      return new Response("Hello, Next.js!", {
+      return new Response("ok", {
         status: 200,
-        headers: { "Set-Cookie": `sid=${session.id}` },
+        headers: {
+          "Set-Cookie": `sid=${session.sid}; Expires=${new Date(
+            session.expires
+          ).toUTCString()}; HttpOnly; Path=/`,
+        },
       });
     }
   } catch (error) {

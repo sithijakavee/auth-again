@@ -1,37 +1,78 @@
+import { db } from "@/lib/db";
+import {
+  SignInFormSchema,
+  SignUpFormSchema,
+  SignUpFormSchemaType,
+} from "@/schemas";
+import bcrypt from "bcryptjs";
+import { User } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
-import jwt from "jsonwebtoken";
-import axios from "axios";
-
+import { generateSID } from "@/lib/token";
 export const POST = async (req: NextRequest) => {
-  const data = await req.json();
+  // console.log(req.headers.get("user-agent"));
 
-  //   const ip = await axios.get("https://api.ipify.org?format=json");
-  const ip = await axios.get("https://ipinfo.io/json");
+  // return Response.json({
+  //   status: 200,
+  // });
 
-  console.log(ip.data);
+  try {
+    const body = await req.json();
 
-  if (data.username !== "sith" || data.password !== "1")
-    return Response.json(
-      { message: "Invalid username or password" },
-      {
-        status: 403,
-      }
+    const validatedFields = SignInFormSchema.safeParse(body);
+
+    if (!validatedFields.success) throw new Error("Invalid fields");
+
+    const user = await db.user.findUnique({
+      where: {
+        email: validatedFields.data.email,
+      },
+    });
+
+    if (!user) throw new Error("Invalid credetials");
+
+    const isPasswordCorrect = await bcrypt.compare(
+      validatedFields.data.password,
+      user.password
     );
 
-  const accessToken = jwt.sign(
-    {
-      exp: Math.floor(Date.now() / 1000) + 60 * 60,
-      data: {
-        username: data.username,
-        role: "admin",
-        pass: data.password,
-      },
-    },
-    "secret"
-  );
+    if (!isPasswordCorrect) throw new Error("Invalid credentials");
 
-  return new Response("Hello, Next.js!", {
-    status: 200,
-    headers: { "Set-Cookie": `access_token=${accessToken}` },
-  });
+    const userAgent = req.headers.get("User-Agent");
+    const sid = generateSID(user.id, user.email);
+    const expires = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000); // 7 days
+    const session = await db.session.create({
+      data: {
+        userId: user.id,
+        sid: sid,
+        userAgent: userAgent!,
+        expires: expires,
+      },
+    });
+
+    return new Response("ok", {
+      status: 200,
+      headers: {
+        "Set-Cookie": `sid=${session.sid}; Expires=${new Date(
+          session.expires
+        ).toUTCString()}; HttpOnly; Path=/`,
+      },
+    });
+  } catch (error) {
+    console.log(error);
+    if (error instanceof Error) {
+      return Response.json(
+        { message: error.message },
+        {
+          status: 400,
+        }
+      );
+    } else {
+      return Response.json(
+        { message: "Something went Wrong" },
+        {
+          status: 400,
+        }
+      );
+    }
+  }
 };
