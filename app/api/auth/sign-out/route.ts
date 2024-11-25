@@ -7,8 +7,6 @@ export const POST = async (req: NextRequest) => {
   const sidCookie = cookieStore.get("sid");
 
   if (sidCookie) {
-    console.log(sidCookie.value);
-
     const session = await db.session.findUnique({
       where: {
         sid: sidCookie.value,

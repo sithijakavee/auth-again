@@ -52,7 +52,7 @@ export const verifySID = (sidCookie: { name: string; value: string }) => {
     }
 
     if (decode) {
-      console.log(decode);
+      decode;
       status = {
         success: true,
         valid: true,

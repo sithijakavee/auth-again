@@ -38,7 +38,6 @@ export const POST = async (req: NextRequest) => {
           expires: expires,
         },
       });
-      console.log(data);
 
       return new Response("ok", {
         status: 200,

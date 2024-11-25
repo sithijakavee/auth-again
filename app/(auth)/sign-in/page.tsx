@@ -15,8 +15,6 @@ const page = () => {
         username: username,
         password: password,
       });
-
-      //   console.log(res);
     } catch (error) {
       if (error instanceof AxiosError) {
         alert(error.response?.data.message);

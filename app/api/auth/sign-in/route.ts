@@ -9,12 +9,6 @@ import { User } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 import { generateSID } from "@/lib/token";
 export const POST = async (req: NextRequest) => {
-  // console.log(req.headers.get("user-agent"));
-
-  // return Response.json({
-  //   status: 200,
-  // });
-
   try {
     const body = await req.json();
 

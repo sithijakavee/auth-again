@@ -5,7 +5,6 @@ import { NextRequest } from "next/server";
 
 export const POST = async (req: NextRequest) => {
   const sidCookie = await req.json();
-  // console.log(sidCookie);
 
   if (!sidCookie) {
     return Response.json({ success: false });

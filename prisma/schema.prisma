@@ -8,19 +8,23 @@ datasource db {
 }
 
 model User {
-  id       String    @id @default(auto()) @map("_id") @db.ObjectId
-  email    String    @unique
-  password String
-  image    String?
-  country  String
-  sessions Session[]
+  id         String    @id @default(auto()) @map("_id") @db.ObjectId
+  email      String    @unique
+  password   String
+  image      String?
+  country    String
+  sessions   Session[]
+  created_at DateTime  @default(now())
+  updated_at DateTime  @updatedAt
 }
 
 model Session {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  sid       String   @unique
-  userId    String   @db.ObjectId
-  userAgent String
-  expires   DateTime
-  user      User     @relation(fields: [userId], references: [id])
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  sid        String   @unique
+  userId     String   @db.ObjectId
+  userAgent  String
+  expires    DateTime
+  user       User     @relation(fields: [userId], references: [id])
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
 }
