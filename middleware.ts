@@ -12,7 +12,7 @@ export default async function middleware(req: NextRequest) {
 
   const isAuthRoute = authRoutes.includes(pathname);
   const isApiAuthRoute = pathname.startsWith(AuthAPIPrefix);
-  let isAuthenticated = true;
+  let isAuthenticated = await auth();
 
   if (isAuthenticated && isAuthRoute)
     return Response.redirect(new URL("/", req.nextUrl.origin));
