@@ -6,7 +6,7 @@ export default async function auth() {
   const sidCookie = cookieStore.get("sid");
   if (sidCookie) {
     const res = await axios.post(
-      "http://localhost:3000/api/auth/session",
+      "https://auth-again.vercel.app/api/auth/session",
       sidCookie
     );
     if (res.data.success) {
